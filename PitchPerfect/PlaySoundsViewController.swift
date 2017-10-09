@@ -61,5 +61,19 @@ class PlaySoundsViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureUI(.notPlaying)
+        setPlaybackButtonsImageContentMode()
+    }
+    
+    // Sets the playback UIButtons UIImageView's UIViewContentMode to ScaleAspectFit
+    // This prevents the playback buttons from appearing squashed in landscape mode.
+    func setPlaybackButtonsImageContentMode() {
+        let contentMode: UIViewContentMode = .scaleAspectFit
+        slowButton.imageView?.contentMode = contentMode
+        fastButton.imageView?.contentMode = contentMode
+        highPitchButton.imageView?.contentMode = contentMode
+        lowPitchButton.imageView?.contentMode = contentMode
+        reverbButton.imageView?.contentMode = contentMode
+        echoButton.imageView?.contentMode = contentMode
+        stopButton.imageView?.contentMode = contentMode
     }
 }
