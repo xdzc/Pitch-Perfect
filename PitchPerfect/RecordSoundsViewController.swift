@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
+class RecordSoundsViewController: UIViewController {
     
     var audioRecorder: AVAudioRecorder!
 
@@ -32,11 +32,7 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     
     // Configures UI components by enabling and disabling components as required.
     func configureUI(recording flag: Bool) {
-        if flag {
-            recordingLabel.text = "Recording in Progress"
-        } else {
-            recordingLabel.text = "Tap to Record"
-        }
+        recordingLabel.text = flag ? "Recording in Progress" : "Tap to Record"
         recordButton.isEnabled = !flag
         stopRecordingButton.isEnabled = flag
     }
@@ -67,19 +63,21 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         try! audioSession.setActive(false)
     }
     
-    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
-        if flag {
-            performSegue(withIdentifier: "stopRecording", sender: audioRecorder.url)
-        } else {
-            print("recording was not successful")
-        }
-    }
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "stopRecording" {
             let playSoundsVC = segue.destination as! PlaySoundsViewController
             let recordedAudioURL = sender as! URL
             playSoundsVC.recordedAudioURL = recordedAudioURL
+        }
+    }
+}
+
+extension RecordSoundsViewController: AVAudioRecorderDelegate {
+    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+        if flag {
+            performSegue(withIdentifier: "stopRecording", sender: audioRecorder.url)
+        } else {
+            recordingLabel.text = "Recording failed, please try again."
         }
     }
 }
